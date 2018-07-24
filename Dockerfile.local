@@ -18,7 +18,12 @@ RUN echo "===> Building jtr daemon..."
 ## fix golang link for alpine
 #RUN mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
 
+# copy version
+RUN mkdir -p /opt/jtrd 
+COPY VERSION /opt/jtrd/
+
 COPY ${appname} /malware/
+COPY VERSION /malware/
 RUN chmod +x /malware/${appname} 
 RUN chown -R malice:malice /malware
 USER malice
