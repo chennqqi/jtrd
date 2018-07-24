@@ -1,28 +1,24 @@
-FROM alpine:3.7
-LABEL maintainer "q@shellpub.com"
+FROM kalilinux/kali-linux-docker
+MAINTAINER <q@shellpub.com>
 
+LABEL maintainer "https://github.com/chennqqi"
+LABEL malice.plugin.repository = "https://github.com/chennqqi/jtrd.git"
 
-ARG app_name=hmbd
+ARG app_name=jtrd
 
 RUN set -x \
   && echo "===> Add malice user and malware folder..." \
   && addgroup malice \
-  && adduser -S -G malice malice \
+  && useradd -S -G malice malice \
   && mkdir /malware
 
-RUN apk --update add ca-certificates
-RUN apk --update add --no-cache -t .build-deps \
-	tini \
-	su-exec \
-  && echo "===> Building hmbd daemon..." \
-  && apk del --purge .build-deps
+RUN apt-get install wordlists john -y && gunzip /usr/share/wordlists/rockyou.txt.gz 
+RUN "===> Building jtr daemon..."
 
-## fix golang link
-RUN mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
+## fix golang link for alpine
+#RUN mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
 
-# Add hmb soft 
-ADD http://dl.shellpub.com/hmb/latest/hmb-linux-amd64.tgz /malware/hmb.tgz
-COPY hmbd /malware/
+COPY ${appname} /malware/
 RUN chmod +x /malware/${appname} \
 	&& tar xvf /malware/hmb.tgz -C /malware \
 	&& ln -s /malware/hmb /bin/hmb
@@ -30,6 +26,5 @@ RUN chown -R malice:malice /malware
 USER malice
 WORKDIR /malware
 
-ENTRYPOINT ["./hmbd"]
-#ENTRYPOINT ["su-exec","malice","/sbin/tini","--","avscan"]
+ENTRYPOINT ["./jtrd"]
 CMD ["--help"]

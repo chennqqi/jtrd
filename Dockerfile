@@ -1,19 +1,14 @@
-FROM malice/alpine
+FROM kalilinux/kali-linux-docker
+MAINTAINER <q@shellpub.com>
+RUN apt-get install wordlists john -y && gunzip /usr/share/wordlists/rockyou.txt.gz 
 
 LABEL maintainer "https://github.com/chennqqi"
+LABEL malice.plugin.repository = "https://github.com/chennqqi/jtrd.git"
 
-LABEL malice.plugin.repository = "https://github.com/chennqqi/hmbd.git"
-LABEL malice.plugin.category="av"
-LABEL malice.plugin.mime="*"
-LABEL malice.plugin.docker.engine="*"
-
-COPY . /go/src/github.com/chennqqi/hmbd
-#RUN apk --update add --no-cache clamav ca-certificates
-RUN apk --update add --no-cache ca-certificates
-RUN apk --update add --no-cache -t .build-deps \
-                    git \
+COPY . /go/src/github.com/chennqqi/jtrd
+RUN apt-get install git \
                     go \
-  && echo "Building hm webshell scanner deamon Go binary..." \
+  && echo "Building hm week password scanner deamon Go binary..." \
   && export GOPATH=/go \
   && mkdir -p /go/src/golang.org/x \
   && cd /go/src/golang.org/x \
@@ -34,9 +29,5 @@ ADD http://dl.shellpub.com/hmb/latest/hmb-linux-amd64.tgz /malware/hmb.tgz
 RUN tar xvf /malware/hmb.tgz -C /malware
 RUN ln -s /malware/hmb /bin/hmb
 
-# Update ClamAV Definitions
-#RUN hmb update
-
-ENTRYPOINT ["hmbd"]
-#ENTRYPOINT ["su-exec","malice","/sbin/tini","--","avscan"]
+ENTRYPOINT ["jtrd"]
 CMD ["--help"]

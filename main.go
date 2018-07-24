@@ -15,8 +15,7 @@ var Version string
 var BuildTime string
 
 func main() {
-	subcommands.Register(&scanCmd{}, "")
-	subcommands.Register(&updateCmd{}, "")
+	subcommands.Register(&crackCmd{}, "")
 	subcommands.Register(&versionCmd{}, "")
 	subcommands.Register(&webCmd{}, "")
 
