@@ -45,19 +45,9 @@ func (p *crackCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...interface{})
 	/*
 		docker run -it -v `pwd`/yourfiletocrack:/crackme.txt adamoss/john-the-ripper /crackme.txt
 	*/
-	filemap := fmt.Sprintf(`%v:/crackme.txt`, file)
-	params := []string{
-		"run",
-		"-it",
-		"--privileged",
-		"-v",
-		filemap,
-		"adamoss/john-the-ripper",
-		"/crackme.txt",
-	}
 
 	ctx := context.TODO()
-	r, err := utils.RunCommand(ctx, "docker", params...)
+	r, err := utils.RunCommand(ctx, "/usr/sbin/jhon", file)
 	if err != nil {
 		fmt.Println(r, err)
 	} else {

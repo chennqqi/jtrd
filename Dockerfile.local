@@ -15,9 +15,6 @@ RUN set -x \
 RUN apt-get install wordlists john -y && gunzip /usr/share/wordlists/rockyou.txt.gz 
 RUN "===> Building jtr daemon..."
 
-## fix golang link for alpine
-#RUN mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
-
 COPY ${appname} /malware/
 RUN chmod +x /malware/${appname} \
 	&& tar xvf /malware/hmb.tgz -C /malware \

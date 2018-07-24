@@ -101,16 +101,6 @@ func jtrSimple(file string, to time.Duration) (string, error) {
 	/*
 		docker run -it -v `pwd`/yourfiletocrack:/crackme.txt adamoss/john-the-ripper /crackme.txt
 	*/
-	filemap := fmt.Sprintf(`%v:/crackme.txt`, file)
-	params := []string{
-		"run",
-		"-it",
-		"--privileged",
-		"-v",
-		filemap,
-		"adamoss/john-the-ripper",
-		"/crackme.txt",
-	}
 
 	type RcdList struct {
 		User string `json:"user"`
@@ -122,7 +112,7 @@ func jtrSimple(file string, to time.Duration) (string, error) {
 		Message string    `json:"message"`
 	}
 
-	r, err := mutils.RunCommand(ctx, "docker", params...)
+	r, err := mutils.RunCommand(ctx, "/usr/sbin/jhon", file)
 	if err != nil {
 		ret.Status = 500
 		ret.Message = err.Error()
@@ -144,5 +134,5 @@ func jtrWordList(dir string, to time.Duration) (string, error) {
 	fmt.Println("start scan ", dir)
 	ctx, cancel := context.WithTimeout(context.TODO(), to)
 	defer cancel()
-	return mutils.RunCommand(ctx, "hmb", "call", dir)
+	return mutils.RunCommand(ctx, "/usr/sbin/jhon", "call", dir)
 }
