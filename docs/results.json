@@ -1,0 +1,10 @@
+{
+  "clamav": {
+    "infected": true,
+    "result": "Eicar-Test-Signature",
+    "engine": "0.99.2",
+    "known": "6299388",
+    "updated": "20170704",
+    "error": ""
+  }
+}
