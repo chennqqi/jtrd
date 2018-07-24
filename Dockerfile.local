@@ -9,16 +9,22 @@ ARG app_name=jtrd
 RUN set -x \
   && echo "===> Add malice user and malware folder..." \
   && addgroup malice \
-  && useradd -S -G malice malice \
+  && useradd -g malice malice \
   && mkdir /malware
 
 RUN apt-get install wordlists john -y && gunzip /usr/share/wordlists/rockyou.txt.gz 
-RUN "===> Building jtr daemon..."
+RUN echo "===> Building jtr daemon..."
+
+## fix golang link for alpine
+#RUN mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
+
+# copy version
+RUN mkdir -p /opt/jtrd 
+COPY VERSION /opt/jtrd/
 
 COPY ${appname} /malware/
-RUN chmod +x /malware/${appname} \
-	&& tar xvf /malware/hmb.tgz -C /malware \
-	&& ln -s /malware/hmb /bin/hmb
+COPY VERSION /malware/
+RUN chmod +x /malware/${appname} 
 RUN chown -R malice:malice /malware
 USER malice
 WORKDIR /malware

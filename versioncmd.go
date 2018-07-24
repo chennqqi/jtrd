@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/google/subcommands"
-	"github.com/malice-plugins/go-plugin-utils/utils"
+	"io/ioutil"
 )
 
 type versionCmd struct {
@@ -28,12 +28,7 @@ func (p *versionCmd) SetFlags(*flag.FlagSet) {
 }
 
 func (p *versionCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
-	ctx := context.TODO()
-	r, err := utils.RunCommand(ctx, "hmb", "version")
-	if err==nil{
-		fmt.Println(r)
-	} else {
-		fmt.Println(r,err)
-	}
+	txt, _ := ioutil.ReadFile("/opt/jtrd/VERSION")
+	fmt.Println(string(txt))
 	return subcommands.ExitSuccess
 }
