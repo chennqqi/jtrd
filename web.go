@@ -279,7 +279,7 @@ func jtrSimple(file, potName, tid string, to time.Duration) (string, error) {
 	}
 
 	defer os.Remove(potName)
-
+	defer os.RemoveAll("/home/malice/.john")
 	r, err := mutils.RunCommand(ctx, "/usr/sbin/john", "--pot="+potName, file)
 	if err != nil {
 		ret.Status = 500

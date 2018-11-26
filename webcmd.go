@@ -43,7 +43,7 @@ func (p *webCmd) SetFlags(f *flag.FlagSet) {
 func (p *webCmd) Execute(context.Context, *flag.FlagSet, ...interface{}) subcommands.ExitStatus {
 	to, err := time.ParseDuration(p.scanto)
 	if err != nil {
-		to, _ = time.ParseDuration("2h")
+		to = time.Second * 3600
 	}
 	if p.callback == "" {
 		p.callback = os.Getenv("JTRD_CALLBACK")
