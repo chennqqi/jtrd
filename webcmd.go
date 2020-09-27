@@ -49,9 +49,6 @@ func (p *webCmd) Execute(context.Context, *flag.FlagSet, ...interface{}) subcomm
 		p.callback = os.Getenv("JTRD_CALLBACK")
 	}
 
-	if p.callback == "" {
-		p.callback = os.Getenv("HMBD_CALLBACK")
-	}
 
 	w, err := NewWeb(p.datadir, p.indexdir, p.callback, to)
 	if err != nil {

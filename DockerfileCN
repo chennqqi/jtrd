@@ -1,16 +1,19 @@
 # builder
 FROM golang:1.14.7-alpine3.12 as backend-builder
 
+RUN go env -w GOPROXY=https://goproxy.cn
+RUN echo "https://mirror.tuna.tsinghua.edu.cn/alpine/v3.12/main" > /etc/apk/repositories
 RUN apk add build-base git musl-dev
 
 COPY . /go/src/github.com/chennqqi/jtrd
 WORKDIR /go/src/github.com/chennqqi/jtrd
-RUN GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -ldflags="-w -s -X main.Version=$(cat VERSION) -X main.BuildTime=$(date +%Y-%m-%dT%H:%I:%M)" -o /go/bin/jtrd
+RUN GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -ldflags="-w -s" -o /go/bin/jtrd
 
 # runtime
 FROM alpine:3.12
 
 # tinghua mirror
+RUN echo "https://mirror.tuna.tsinghua.edu.cn/alpine/v3.12/main" > /etc/apk/repositories
 RUN apk add --no-cache -U tzdata john
 RUN mkdir -p /app
 
@@ -21,6 +24,7 @@ RUN	addgroup -S app && \
 	chown -R app:app /app
 
 WORKDIR /app
+COPY VERSION .
 USER app
 
 EXPOSE 8080

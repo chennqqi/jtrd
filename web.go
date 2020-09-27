@@ -52,8 +52,7 @@ type weakPassJob struct {
 }
 
 func (s *Web) version(c *gin.Context) {
-	txt, _ := ioutil.ReadFile("/opt/jtrd/VERSION")
-	c.Data(200, "", txt)
+	c.String(200, "%v -- %v", Version, BuildTime)
 }
 
 func (s *Web) Shutdown(ctx context.Context) error {
@@ -216,7 +215,6 @@ func (s *Web) Run(port int, ctx context.Context) error {
 	go s.scanRoute(scanctx)
 
 	gin.SetMode(gin.ReleaseMode)
-
 	r := gin.Default()
 	r.GET("/version", s.version)
 	r.POST("/simple", s.simple)

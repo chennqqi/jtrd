@@ -22,22 +22,22 @@ func (p *crackCmd) Synopsis() string {
 }
 
 func (p *crackCmd) Usage() string {
-	return "crack <targetfile>"
+	return "crack <password file>"
 }
 
 func (p *crackCmd) SetFlags(f *flag.FlagSet) {
 }
 
 func (p *crackCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
-	args := flag.Args()
+	args := f.Args()
 	if len(args) != 1 {
-		fmt.Println("target password file is must")
+		fmt.Println("target password file is must", len(args))
 		return subcommands.ExitUsageError
 	}
 	file := args[0]
 	fd, err := os.Open(file)
 	if os.IsNotExist(err) || err != nil {
-		fmt.Println("target password file is must")
+		fmt.Println("target password file is must", err)
 		return subcommands.ExitUsageError
 	}
 	fd.Close()
@@ -47,7 +47,7 @@ func (p *crackCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...interface{})
 	*/
 
 	ctx := context.TODO()
-	r, err := utils.RunCommand(ctx, "/usr/sbin/jhon", file)
+	r, err := utils.RunCommand(ctx, "/usr/sbin/john", file)
 	if err != nil {
 		fmt.Println(r, err)
 	} else {
