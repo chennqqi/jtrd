@@ -7,7 +7,7 @@ RUN apk add build-base git musl-dev
 
 COPY . /go/src/github.com/chennqqi/jtrd
 WORKDIR /go/src/github.com/chennqqi/jtrd
-RUN GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -ldflags="-w -s" -o /go/bin/jtrd
+RUN GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -ldflags="-w -s -X main.Version=$(cat VERSION) -X main.BuildTime=$(date +%Y-%m-%dT%H:%I:%M)" -o /go/bin/jtrd
 
 # runtime
 FROM alpine:3.12
@@ -24,7 +24,6 @@ RUN	addgroup -S app && \
 	chown -R app:app /app
 
 WORKDIR /app
-COPY VERSION .
 USER app
 
 EXPOSE 8080
