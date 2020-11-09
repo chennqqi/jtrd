@@ -47,7 +47,7 @@ func (p *crackCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...interface{})
 	*/
 
 	ctx := context.TODO()
-	r, err := utils.RunCommand(ctx, "/usr/sbin/john", file)
+	r, err := utils.RunCommand(ctx, "/usr/bin/john", file)
 	if err != nil {
 		fmt.Println(r, err)
 	} else {

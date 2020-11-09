@@ -11,6 +11,7 @@ RUN GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -ldflags="-w -s -X ma
 FROM alpine:3.12
 
 # tinghua mirror
+echo http://dl-cdn.alpinelinux.org/alpine/v3.12/community >> /etc/apk/repositories
 RUN apk add --no-cache -U tzdata john
 RUN mkdir -p /app
 

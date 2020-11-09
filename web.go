@@ -278,7 +278,7 @@ func jtrSimple(file, potName, tid string, to time.Duration) (string, error) {
 
 	defer os.Remove(potName)
 	defer os.RemoveAll("/home/malice/.john")
-	r, err := mutils.RunCommand(ctx, "/usr/sbin/john", "--pot="+potName, file)
+	r, err := mutils.RunCommand(ctx, "/usr/bin/john", "--pot="+potName, file)
 	if err != nil {
 		ret.Status = 500
 		ret.Message = err.Error()
@@ -341,5 +341,5 @@ func jtrWordList(dir string, to time.Duration) (string, error) {
 	fmt.Println("start scan ", dir)
 	ctx, cancel := context.WithTimeout(context.TODO(), to)
 	defer cancel()
-	return mutils.RunCommand(ctx, "/usr/sbin/john", "wordlist=", dir)
+	return mutils.RunCommand(ctx, "/usr/bin/john", "wordlist=", dir)
 }
